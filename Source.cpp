@@ -25,6 +25,15 @@ enum class SEARCH_OPTIONS
     CASE_INSENSITIVE    = 1
 };
 
+enum class PROGRAM_INPUTS
+{
+    PROGRAM_NAME        = 0,
+    DIRECTORY_NAME      = 1,
+    FILE_NAME           = 2,
+    SEARCH_TYPE         = 3,
+    CASE_SENSITIVITY    = 4
+};
+
 std::string str_tolower(std::string s)
 {
     std::transform(s.begin(), s.end(), s.begin(),
@@ -309,30 +318,32 @@ int main(int argc, char* argv[])
 
     for (int element = 0; element < argc; element++)
     {
-        switch (element)
+        PROGRAM_INPUTS input = (PROGRAM_INPUTS)element;
+
+        switch (input)
         {
-        case 0:
+        case PROGRAM_INPUTS::PROGRAM_NAME:
         {
             executable_name = std::string(argv[0]);
             break;
         }
-        case 1:
+        case PROGRAM_INPUTS::DIRECTORY_NAME:
         {
             // TODO::Check for empty strings and whatnot
             path_input = std::string(argv[1]);
             break;
         }
-        case 2:
+        case PROGRAM_INPUTS::FILE_NAME:
         {
             name_input = std::string(argv[2]);
             break;
         }
-        case 3:
+        case PROGRAM_INPUTS::SEARCH_TYPE:
         {
             flag = *(unsigned int*)argv[3];
             break;
         }
-        case 4:
+        case PROGRAM_INPUTS::CASE_SENSITIVITY:
         {
             case_sensitivity = *(unsigned int*)argv[4];
             break;
