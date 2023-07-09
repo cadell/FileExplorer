@@ -33,14 +33,24 @@ std::string str_tolower(std::string s)
     return s;
 }
 
-std::vector<std::filesystem::path> SearchPathSetup (std::string & path)
+std::vector<std::filesystem::path> SearchPathSetup (std::string & path, std::string file_name)
 {
     std::vector<std::filesystem::path> recursive_paths;
 
     for (auto& p : std::filesystem::directory_iterator(path, std::filesystem::directory_options::skip_permission_denied))
     {
-        if(p.is_directory())
+        if (p.is_directory())
+        {
             recursive_paths.push_back(p);
+        }
+
+        std::string string_lower_token = str_tolower((p.path().stem().string()));
+        if (string_lower_token.find(str_tolower(file_name)) != std::string::npos)
+        {
+            //std::cout << p.path().stem().string() << '\n';
+            std::cout << p.path().string() << '\n';
+        }
+
     }
     return recursive_paths;
 }
@@ -346,7 +356,7 @@ int main(int argc, char* argv[])
     //std::string ext(".log");
     std::string ext("");
 
-    auto hold = SearchPathSetup(path);
+    auto hold = SearchPathSetup(path, file_name);
     const auto start = std::chrono::steady_clock::now();
     SpawnSearchThreads(SEARCH_FLAG::FILE_SEARCH,hold,file_name ,ext, SEARCH_OPTIONS::CASE_INSENSITIVE);
     const auto end = std::chrono::steady_clock::now();
